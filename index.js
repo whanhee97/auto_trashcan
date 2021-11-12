@@ -50,7 +50,7 @@ app.post("/trashinfo", upload.single("file"), (req, res, next) => {
 
 app.get("/trashinfo", (req, res) => {
   fs.readFile("tmp", (err, data) => {
-    res.writeHead(200, { "Content-Type": "" });
+    //res.writeHead(200, { "Content-Type": "" });
     res.json({ ok: true, trashType: req.session.trashType, pic: data });
   });
 });
