@@ -49,10 +49,10 @@ app.post("/trashinfo", upload.single("file"), (req, res, next) => {
 });
 
 app.get("/trashinfo", (req, res) => {
-  fs.readFile("tmp", (err, data) => {
-    //res.writeHead(200, { "Content-Type": "" });
-    res.json({ ok: true, trashType: req.session.trashType, pic: data });
-  });
+  const readFile = fs.readFileSync("./tmp");
+  const encode = Buffer.from(readFile).toString("base64");
+
+  res.json({ ok: true, trashType: req.session.trashType, pic: encode });
 });
 
 app.post("/trashcaninfo", (req, res) => {
