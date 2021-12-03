@@ -5,6 +5,8 @@ const fs = require("fs");
 const multer = require("multer");
 const session = require("express-session");
 const MemoryStore = require("memorystore")(session);
+let trashType = -1;
+let isFull = 0;
 
 app.use(express.json());
 
@@ -40,7 +42,7 @@ app.get("/", (req, res) => {
 app.post("/trashinfo", upload.single("file"), (req, res, next) => {
   const reqfile = req.file;
   const reqbody = req.body;
-  req.session.trashType = reqbody.trashType;
+  trashType = reqbody.trashType;
 
   console.log(reqfile);
   console.log(reqbody);
@@ -52,18 +54,18 @@ app.get("/trashinfo", (req, res) => {
   const readFile = fs.readFileSync("./tmp");
   const encode = Buffer.from(readFile).toString("base64");
 
-  res.json({ ok: true, trashType: req.session.trashType, pic: encode });
+  res.json({ ok: true, trashType: trashType, pic: encode });
 });
 
 app.post("/trashcaninfo", (req, res) => {
   const reqbody = req.body;
   console.log(reqbody);
-  req.session.isFull = reqbody.isFull;
+  isFull = reqbody.isFull;
   res.json({ ok: true, data: "trashcan info update!" });
 });
 
 app.get("/trashcaninfo", (req, res) => {
-  res.json({ ok: true, isFull: req.session.isFull });
+  res.json({ ok: true, isFull: isFull });
 });
 
 app.listen(5000);
